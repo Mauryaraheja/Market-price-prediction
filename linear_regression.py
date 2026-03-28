@@ -128,28 +128,27 @@ def train_model(X, y):
 # ============================================
 
 def print_metrics(model, feature_cols, y_test, y_pred):
-    # RMSE — average prediction error in dollars
-    # Lower is better
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    r2   = r2_score(y_test, y_pred)
 
-    # R² — how much of the price movement the model explains
-    # 1.0 = perfect, 0.0 = no better than guessing the average
-    r2 = r2_score(y_test, y_pred)
+    # ADD THIS — directional accuracy
+    # y_test[1:] = today's actual price
+    # y_test[:-1] = yesterday's actual price
+    actual_dir   = np.sign(y_test[1:]  - y_test[:-1])   # did price actually go up or down?
+    pred_dir     = np.sign(y_pred[1:]  - y_test[:-1])   # did model predict up or down?
+    dir_accuracy = np.mean(actual_dir == pred_dir) * 100
 
     print("=" * 40)
     print("LINEAR REGRESSION RESULTS")
     print("=" * 40)
-    print(f"RMSE        : ${rmse:.2f}")
-    print(f"R² Score    : {r2:.4f}  ({r2 * 100:.1f}% variance explained)")
+    print(f"RMSE             : ${rmse:.2f}")
+    print(f"R² Score         : {r2:.4f}  ({r2 * 100:.1f}% variance explained)")
+    print(f"Directional Acc. : {dir_accuracy:.2f}%  (50% = random guess)")  # ADD THIS
     print()
 
-    # Show what each feature contributed
-    # coef_ tells us: "for every 1 unit increase in this feature,
-    # the predicted price changes by this many dollars"
     print("Feature weights (coefficients):")
     for name, coef in zip(feature_cols, model.coef_):
         print(f"  {name:<16}: {coef:+.4f}")
-
     print(f"  {'intercept':<16}: {model.intercept_:+.4f}")
     print("=" * 40)
 

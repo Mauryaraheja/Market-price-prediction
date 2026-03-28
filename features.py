@@ -16,6 +16,9 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     Target: next candle's Close price (regression target)
     """
     feat = df.copy()
+    if isinstance(feat.columns, pd.MultiIndex):
+        feat.columns = feat.columns.get_level_values(0)
+    feat.columns = [col.strip() for col in feat.columns]
 
     # ── 1. Price-derived features ──────────────────────────────────────────
     feat["returns"]       = feat["Close"].pct_change()              # % daily return
