@@ -34,7 +34,8 @@ def get_data(ticker="AAPL", period="2y", interval="1d"):
 
     # Reset index so 'Date' becomes a regular column
     df = df.reset_index()
-
+    
+    df['date'] = df.index 
     return df
 
 

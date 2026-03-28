@@ -1,4 +1,7 @@
 #utils file - small reusable tools
+import pandas as pd
+
+
 def is_strong_bullish_candle(candle):
     open_price = candle['open']
     close_price = candle['close']
@@ -209,3 +212,10 @@ def calculate_bollinger_bands(data, period=20):
     return upper_band, middle_band, lower_band
     # returns three separate lists
     # example index 50: upper=185.2, middle=178.4, lower=171.6
+
+def calculate_rsi(close : pd.series , period :int = 14) -> pd.series :
+    delta = close.diff()
+    gain = delta.clip(lower=0).rolling(period).mean()
+    loss = -delta.clip(upper=0).rolling(period).mean()
+    rs = gain / (loss + 1e-9)
+    return 100 - (100 / (1 + rs))
