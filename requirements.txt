@@ -1,0 +1,23 @@
+# Core API
+fastapi==0.135.2
+uvicorn==0.42.0
+
+# ML
+tensorflow==2.21.0
+keras==3.13.2
+scikit-learn==1.8.0
+numpy==2.4.3
+pandas==3.0.1
+joblib==1.5.3
+
+# Data
+yfinance==1.2.0
+requests==2.33.0
+
+# Streamlit Dashboard
+streamlit
+plotly
+
+# Required by TensorFlow
+protobuf==6.31.1
+h5py==3.14.0
